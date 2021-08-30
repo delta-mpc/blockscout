@@ -7,7 +7,6 @@ on:
       - v*
     paths-ignore:
       - 'docs/**'
-      - '.github/**'
 
 jobs:
   build:
