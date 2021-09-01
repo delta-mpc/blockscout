@@ -98,6 +98,39 @@ defmodule Indexer.Fetcher.InternalTransaction do
     Logger.metadata(count: unique_numbers_count)
 
     Logger.debug("fetching internal transactions for blocks")
+
+    json_rpc_named_arguments
+    |> Keyword.fetch!(:variant)
+    |> case do
+      EthereumJSONRPC.Parity ->
+        EthereumJSONRPC.fetch_block_internal_transactions(unique_numbers, json_rpc_named_arguments)
+
+      EthereumJSONRPC.Besu ->
+        EthereumJSONRPC.fetch_block_internal_transactions(unique_numbers, json_rpc_named_arguments)
+
+      _ ->
+        try do
+          fetch_block_internal_transactions_by_transactions(unique_numbers, json_rpc_named_arguments)
+        rescue
+          error ->
+            {:error, error}
+        end
+    end
+    |> case do
+      {:ok, internal_transactions_params} ->
+        import_internal_transaction(internal_transactions_params, unique_numbers)
+
+      {:error, reason} ->
+        Logger.error(fn -> ["failed to fetch internal transactions for blocks: ", inspect(reason)] end,
+          error_count: unique_numbers_count
+        )
+
+        # re-queue the de-duped entries
+        {:retry, unique_numbers}
+
+      :ignore ->
+        :ok
+    end
   end
 
   def import_first_trace(internal_transactions_params) do
