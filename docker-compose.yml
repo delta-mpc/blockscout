@@ -12,6 +12,9 @@ services:
         source: ./postgres_data
         target: /var/lib/postgresql/data
   explorer:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
     image: deltampc/delta-chain-explorer:dev
     container_name: blockscout
     ports:
