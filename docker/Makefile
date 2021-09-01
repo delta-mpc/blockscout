@@ -1,9 +1,9 @@
 SYSTEM = $(shell uname -s)
 HOST = host.docker.internal
-DOCKER_IMAGE = blockscout_prod
+DOCKER_IMAGE = deltampc/delta-chain-explorer:dev
 BS_CONTAINER_NAME = blockscout
 PG_CONTAINER_NAME = postgres
-PG_CONTAINER_IMAGE = postgres:12.5
+PG_CONTAINER_IMAGE = postgres:alpine3.14
 THIS_FILE = $(lastword $(MAKEFILE_LIST))
 
 ifeq ($(SYSTEM), Linux)

@@ -1,8 +1,40 @@
 version: '3.1'
 
 services:
-  db:
+  postgres:
     image: postgres:alpine3.14
-    restart: always
+    container_name: postgres
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_PASSWORD: 1234qwer
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - type: bind
+        source: ./postgres_data
+        target: /var/lib/postgresql/data
+  explorer:
+    image: deltampc/delta-chain-explorer:dev
+    container_name: blockscout
+    ports:
+      - "4000:4000"
+    depends_on:
+      - migrate
+    environment:
+      DATABASE_URL: postgresql://postgres:1234qwer@postgres:5432/explorer?ssl=false
+      ETHEREUM_JSONRPC_VARIANT: parity
+      ETHEREUM_JSONRPC_HTTP_URL: https://rpc.delta.yuanben.org
+      ETHEREUM_JSONRPC_TRACE_URL: https://rpc.delta.yuanben.org
+      ETHEREUM_JSONRPC_WS_URL: wss://node.delta.yuanben.org
+      COIN: DAI
+    entrypoint: mix phx.server
+  migrate:
+    image: deltampc/delta-chain-explorer:dev
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgresql://postgres:1234qwer@postgres:5432/explorer?ssl=false
+      ETHEREUM_JSONRPC_VARIANT: parity
+      ETHEREUM_JSONRPC_HTTP_URL: https://rpc.delta.yuanben.org
+      ETHEREUM_JSONRPC_WS_URL: wss://node.delta.yuanben.org
+      COIN: DAI
+    entrypoint: mix do ecto.create, ecto.migrate
+
