@@ -73,8 +73,12 @@ config :logger, :indexer,
        block_number step count error_count shrunk import_id transaction_id)a,
   metadata_filter: [application: :indexer]
 
-config :indexer, Indexer.Fetcher.BlockReward.Supervisor, disabled?: true
-config :indexer, Indexer.Fetcher.InternalTransaction.Supervisor, disabled?: true
+config :indexer, Indexer.Fetcher.BlockReward.Supervisor,
+       disabled?: System.get_env("DISABLE_FETCHER_BLOCK_REWARD") == "yes"
+config :indexer, Indexer.Fetcher.InternalTransaction.Supervisor,
+       disabled?: System.get_env("DISABLE_FETCHER_INTERNAL") == "yes"
+config :indexer, Indexer.Fetcher.PendingTransaction.Supervisor,
+       disabled?: System.get_env("DISABLE_FETCHER_PENDING") == "yes"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

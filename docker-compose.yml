@@ -20,7 +20,7 @@ services:
     ports:
       - "4000:4000"
     depends_on:
-      - migrate
+      - postgres
     environment:
       DATABASE_URL: postgresql://postgres:1234qwer@postgres:5432/explorer?ssl=false
       ETHEREUM_JSONRPC_VARIANT: parity
@@ -28,16 +28,5 @@ services:
       ETHEREUM_JSONRPC_TRACE_URL: https://rpc.delta.yuanben.org
       ETHEREUM_JSONRPC_WS_URL: wss://node.delta.yuanben.org
       COIN: DAI
-    entrypoint: mix phx.server
-  migrate:
-    image: deltampc/delta-chain-explorer:dev
-    depends_on:
-      - postgres
-    environment:
-      DATABASE_URL: postgresql://postgres:1234qwer@postgres:5432/explorer?ssl=false
-      ETHEREUM_JSONRPC_VARIANT: parity
-      ETHEREUM_JSONRPC_HTTP_URL: https://rpc.delta.yuanben.org
-      ETHEREUM_JSONRPC_WS_URL: wss://node.delta.yuanben.org
-      COIN: DAI
-    entrypoint: mix do ecto.create, ecto.migrate
+    entrypoint: [ "/bin/sh", "-c", "mix do ecto.create, ecto.migrate; mix phx.server" ]
 
