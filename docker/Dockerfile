@@ -1,6 +1,11 @@
 FROM bitwalker/alpine-elixir-phoenix:1.11.4
 
-RUN apk --no-cache --update add alpine-sdk gmp-dev automake libtool inotify-tools autoconf python3 file
+ARG JUPYTERHUB_VERSION=1.4.2
+RUN pip3 install --no-cache jupyterhub==${JUPYTERHUB_VERSION}
+
+
+RUN apk --no-cache --update add alpine-sdk gmp-dev automake libtool inotify-tools autoconf \
+    python3 py3-pip py3-ruamel.yaml py3-cryptography py3-sqlalchemy file
 
 # Get Rust
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
@@ -39,6 +44,6 @@ RUN cd apps/block_scout_web/assets/ && \
 
 RUN cd apps/explorer/ && \
     npm install && \
-    apk update && apk del --force-broken-world alpine-sdk gmp-dev automake libtool inotify-tools autoconf python3
+    apk update && apk del --force-broken-world alpine-sdk gmp-dev automake libtool inotify-tools autoconf
 
 RUN mix phx.digest
