@@ -1,7 +1,7 @@
 FROM bitwalker/alpine-elixir-phoenix:1.11.4
 
 RUN apk --no-cache --update add alpine-sdk gmp-dev automake libtool inotify-tools autoconf \
-    python3 py3-pip py3-ruamel.yaml py3-cryptography py3-sqlalchemy file \
+    python3 py3-pip py3-ruamel.yaml py3-cryptography py3-sqlalchemy file
 
 ARG JUPYTERHUB_VERSION=1.4.2
 RUN pip3 install --no-cache jupyterhub==${JUPYTERHUB_VERSION}
