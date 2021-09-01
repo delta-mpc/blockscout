@@ -49,7 +49,7 @@ defmodule EthereumJsonrpc.MixProject do
 
   defp env_aliases(:dev), do: []
 
-  defp env_aliases(_env), do: [compile: "compile --warnings-as-errors"]
+  defp env_aliases(_env), do: [compile: "compile"]
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
