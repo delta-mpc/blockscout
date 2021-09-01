@@ -73,6 +73,9 @@ config :logger, :indexer,
        block_number step count error_count shrunk import_id transaction_id)a,
   metadata_filter: [application: :indexer]
 
+config :indexer, Indexer.Fetcher.BlockReward.Supervisor, disabled?: true
+config :indexer, Indexer.Fetcher.InternalTransaction.Supervisor, disabled?: true
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"
