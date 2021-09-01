@@ -23,7 +23,7 @@ services:
       - postgres
     environment:
       DATABASE_URL: postgresql://postgres:1234qwer@postgres:5432/explorer?ssl=false
-      ETHEREUM_JSONRPC_VARIANT: parity
+      ETHEREUM_JSONRPC_VARIANT: ganache
       ETHEREUM_JSONRPC_HTTP_URL: https://rpc.delta.yuanben.org
       ETHEREUM_JSONRPC_TRACE_URL: https://rpc.delta.yuanben.org
       ETHEREUM_JSONRPC_WS_URL: wss://node.delta.yuanben.org
